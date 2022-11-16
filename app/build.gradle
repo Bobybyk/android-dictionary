@@ -7,6 +7,10 @@ android {
     namespace 'fr.uparis.pcm7'
     compileSdk 32
 
+    buildFeatures{
+        viewBinding true //enable view binding
+    }
+
     defaultConfig {
         applicationId "fr.uparis.pcm7"
         minSdk 28
