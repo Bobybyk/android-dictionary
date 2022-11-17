@@ -2,7 +2,6 @@ package fr.uparis.learnVocabulary.database
 
 import androidx.room.*
 import fr.uparis.learnVocabulary.database.entities.Language
-import fr.uparis.learnVocabulary.database.entities.LanguageInfo
 
 @Dao
 interface VocabularyDAO {
@@ -13,7 +12,7 @@ interface VocabularyDAO {
     @Query("SELECT * FROM Language")
     fun loadAllLanguages() : List<Language>
 
-    @Delete(entity = Language::class)
-    fun deleteLanguage(lang: LanguageInfo) : Int
+    @Delete
+    fun deleteLanguage(lang: Language) : Int
 
 }

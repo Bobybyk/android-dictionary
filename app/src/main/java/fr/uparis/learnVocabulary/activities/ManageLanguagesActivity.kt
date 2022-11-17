@@ -75,6 +75,11 @@ class ManageLanguagesActivity : AppCompatActivity() {
                 binding.newLanguage.text.clear()
             }
         }
+
+        binding.delete.setOnClickListener {
+            model.deleteLanguage("test")
+        }
+
     }
 
     fun notifyError() {
