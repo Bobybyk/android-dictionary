@@ -23,6 +23,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.browseLang.setOnClickListener {
+            val intent = Intent(this,ManageLanguagesActivity::class.java)
+            startActivity(intent)
+        }
+
         //Searches the word written in the edit text when the button is clicked
         binding.search.setOnClickListener {
             val url = "https://www.larousse.fr/dictionnaires/francais-anglais/${binding.searchWord.text}"
