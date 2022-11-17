@@ -38,7 +38,11 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:gravity="end"/>
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/sessionsPerDay"
+                android:selectAllOnFocus="true"
+                android:gravity="end"
+                android:id="@+id/wordsPerSession"/>
         </LinearLayout>
 
         <LinearLayout
@@ -53,7 +57,11 @@
                 android:layout_width="0sp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:imeOptions="actionDone"
+                android:selectAllOnFocus="true"
+                android:gravity="end"
+                android:id="@+id/sessionsPerDay"/>
         </LinearLayout>
 
     </LinearLayout>
