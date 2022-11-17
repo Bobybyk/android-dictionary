@@ -9,7 +9,7 @@
     android:paddingTop="16sp"
     android:paddingRight="16sp"
     android:paddingBottom="16sp"
-        tools:context=".Settings">
+        tools:context=".activities.SettingsActivity">
 
     <TextView
         android:id="@+id/textView"

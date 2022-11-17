@@ -1,13 +1,12 @@
-package fr.uparis.pcm7
+package fr.uparis.learnVocabulary.activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
-import fr.uparis.pcm7.databinding.ActivitySettingsBinding
+import fr.uparis.learnVocabulary.databinding.ActivitySettingsBinding
 
-class Settings : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySettingsBinding
 
@@ -16,7 +15,7 @@ class Settings : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPref = getSharedPreferences("PCM7",Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("fr.uparis.learnVocabulary",Context.MODE_PRIVATE)
 
         val wordsPerSession = sharedPref.getInt("wordsPerSession", 10).toString()
         binding.wordsPerSession.setText(wordsPerSession)

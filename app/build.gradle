@@ -1,18 +1,20 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp' version "1.7.10-1.0.6"
+
 }
 
 android {
-    namespace 'fr.uparis.pcm7'
-    compileSdk 32
+    namespace 'fr.uparis.learnVocabulary'
+    compileSdk 33
 
     buildFeatures{
         viewBinding true //enable view binding
     }
 
     defaultConfig {
-        applicationId "fr.uparis.pcm7"
+        applicationId "fr.uparis.learnVocabulary"
         minSdk 28
         targetSdk 32
         versionCode 1
@@ -45,4 +47,18 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation "androidx.cardview:cardview:1.0.0"
+    def lifecycle_version = '2.6.0-alpha02'
+// ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+// LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+//Room
+    def room_version = "2.4.3"
+    implementation "androidx.room:room-ktx:$room_version"
+// To use Kotlin Symbol Processing (KSP)
+    ksp "androidx.room:room-compiler:$room_version"
+
 }

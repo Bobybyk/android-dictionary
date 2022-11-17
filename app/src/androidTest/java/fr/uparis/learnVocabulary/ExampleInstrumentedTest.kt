@@ -1,4 +1,4 @@
-package fr.uparis.pcm7
+package fr.uparis.learnVocabulary
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

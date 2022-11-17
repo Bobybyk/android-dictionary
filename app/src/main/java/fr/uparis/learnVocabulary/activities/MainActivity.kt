@@ -1,11 +1,12 @@
-package fr.uparis.pcm7
+package fr.uparis.learnVocabulary.activities
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import fr.uparis.pcm7.databinding.ActivityMainBinding
+import fr.uparis.learnVocabulary.R
+import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         //when the button is clicked, launche the setting activity
         binding.settings.setOnClickListener {
-            intent = Intent(this, Settings::class.java)
+            intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
@@ -32,11 +33,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Populate the spinners with the languages
-        ArrayAdapter.createFromResource(this,R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
+        ArrayAdapter.createFromResource(this, R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.lFrom.adapter = adapter
         }
-        ArrayAdapter.createFromResource(this,R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
+        ArrayAdapter.createFromResource(this, R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.lTo.adapter = adapter
         }

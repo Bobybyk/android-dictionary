@@ -1,4 +1,4 @@
-package fr.uparis.pcm7
+package fr.uparis.learnVocabulary
 
 import org.junit.Test
 

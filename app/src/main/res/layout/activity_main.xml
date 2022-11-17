@@ -9,7 +9,7 @@
     android:paddingTop="16sp"
     android:paddingRight="16sp"
     android:paddingBottom="16sp"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,12 +45,31 @@
                 android:id="@+id/lTo"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/search"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+            android:id="@+id/browse_lang"
             android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="Rechercher"/>
+            android:layout_gravity="start"
+            android:text="Voir langues"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Rechercher"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 
