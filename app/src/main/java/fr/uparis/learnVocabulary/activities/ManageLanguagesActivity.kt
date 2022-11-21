@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.uparis.learnVocabulary.LanguagesListRecyclerViewAdapter
+import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.database.entities.Language
 import fr.uparis.learnVocabulary.databinding.ActivityManageLanguagesBinding
 import fr.uparis.learnVocabulary.viewModels.ManageLanguagesViewModel
@@ -25,6 +26,10 @@ class ManageLanguagesActivity : AppCompatActivity() {
         binding = ActivityManageLanguagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        var colorEven = resources.getColor(R.color.even,null)
+        var colorOdd = resources.getColor(R.color.odd,null)
+        var colorSelected = resources.getColor(R.color.selected,null)
 
         //Load all languages when creating class
         model.loadAllLanguages()
@@ -44,7 +49,7 @@ class ManageLanguagesActivity : AppCompatActivity() {
         //update list after language load query
         model.loadInfo.observe(this) {
             if(it.toMutableList().isNotEmpty()) {
-                adapter = LanguagesListRecyclerViewAdapter(it.toMutableList())
+                adapter = LanguagesListRecyclerViewAdapter(it.toMutableList(),colorEven,colorOdd,colorSelected)
                 binding.recyclerView.adapter = adapter
             }
         }
@@ -77,7 +82,7 @@ class ManageLanguagesActivity : AppCompatActivity() {
         }
 
         binding.delete.setOnClickListener {
-            model.deleteLanguage("test")
+            model.deleteLanguage(*adapter.getSelected().toTypedArray())
         }
 
     }
