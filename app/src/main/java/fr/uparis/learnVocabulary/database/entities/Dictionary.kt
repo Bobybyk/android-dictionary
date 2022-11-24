@@ -1,22 +1,19 @@
 package fr.uparis.learnVocabulary.database.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-
 
 @Entity(
-    primaryKeys = ["word", "sourceLanguage"],
+    primaryKeys = ["sourceLanguage", "destinationLanguage", "url"],
     foreignKeys = [ForeignKey(
         entity = Language::class,
         parentColumns = arrayOf("lang"),
-        childColumns = arrayOf("word"),
+        childColumns = arrayOf("url"),
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class Word(
-    var word : String,
+data class Dictionary(
     var sourceLanguage: Language,
-    var destinationLanguage: Language
-    )
+    var destinationLanguage: Language,
+    var url: String
+)
