@@ -29,9 +29,9 @@ class ManageLanguagesViewModel (application: Application) : AndroidViewModel(app
     }
 
     var deleteInfo = MutableLiveData<Int>(0)
-    fun deleteLanguage(lang : String) {
+    fun deleteLanguage(vararg lang : Language) {
         thread {
-            val l = dao.deleteLanguage(Language(lang))
+            val l = dao.deleteLanguage(*lang)
             deleteInfo.postValue(l)
         }
     }

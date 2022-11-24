@@ -13,6 +13,6 @@ interface VocabularyDAO {
     fun loadAllLanguages() : List<Language>
 
     @Delete
-    fun deleteLanguage(lang: Language) : Int
+    fun deleteLanguage(vararg lang: Language) : Int
 
 }
