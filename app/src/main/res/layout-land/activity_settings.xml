@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16sp"
+    android:paddingTop="16sp"
+    android:paddingRight="16sp"
+    android:paddingBottom="16sp"
+        tools:context=".activities.SettingsActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Paramètres"
+        android:textSize="24sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de mots par session:"/>
+            <EditText
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@id/sessionsPerDay"
+                android:selectAllOnFocus="true"
+                android:gravity="end"
+                android:id="@+id/wordsPerSession"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de sessions par jour:"/>
+            <EditText
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:imeOptions="actionDone"
+                android:selectAllOnFocus="true"
+                android:gravity="end"
+                android:id="@+id/sessionsPerDay"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
