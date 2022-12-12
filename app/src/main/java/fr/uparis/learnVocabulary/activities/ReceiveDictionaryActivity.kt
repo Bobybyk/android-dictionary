@@ -9,7 +9,7 @@ import fr.uparis.learnVocabulary.databinding.ActivityReceiveDictionaryBinding
 
 class ReceiveDictionaryActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityReceiveDictionaryBinding
+    private lateinit var binding : ActivityReceiveDictionaryBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
