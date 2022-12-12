@@ -15,9 +15,9 @@ import fr.uparis.learnVocabulary.viewModels.ManageLanguagesViewModel
 
 class ManageLanguagesActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityManageLanguagesBinding
-    lateinit var adapter : LanguagesListRecyclerViewAdapter
-    val model by lazy {
+    private lateinit var binding : ActivityManageLanguagesBinding
+    private lateinit var adapter : LanguagesListRecyclerViewAdapter
+    private val model by lazy {
         ViewModelProvider(this)[ManageLanguagesViewModel::class.java]
     }
 
@@ -27,9 +27,9 @@ class ManageLanguagesActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
-        var colorEven = resources.getColor(R.color.even,null)
-        var colorOdd = resources.getColor(R.color.odd,null)
-        var colorSelected = resources.getColor(R.color.selected,null)
+        val colorEven : Int = resources.getColor(R.color.even,null)
+        val colorOdd : Int = resources.getColor(R.color.odd,null)
+        val colorSelected : Int = resources.getColor(R.color.selected,null)
 
         //Load all languages when creating class
         model.loadAllLanguages()
@@ -38,7 +38,7 @@ class ManageLanguagesActivity : AppCompatActivity() {
         binding.newLanguage.setOnEditorActionListener { _, actionId, _ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 if (binding.newLanguage.text.isNotEmpty()) {
-                    var lang = Language(binding.newLanguage.text.toString())
+                    val lang = Language(binding.newLanguage.text.toString())
                     model.insertLanguage(lang)
                     binding.newLanguage.text.clear()
                 }
@@ -67,15 +67,18 @@ class ManageLanguagesActivity : AppCompatActivity() {
         model.deleteInfo.observe(this) {
             if(it.equals(0))
                 return@observe
-            else if(it.equals(-1))
+            else if(it.equals(-1)) {
                 notifyError()
+                return@observe
+            }
+            Log.d(null,"deleted one language")
             model.loadAllLanguages()
         }
 
         //insert new language when clicking on button
         binding.add.setOnClickListener {
             if(binding.newLanguage.text.isNotEmpty()) {
-                var lang = Language(binding.newLanguage.text.toString())
+                val lang = Language(binding.newLanguage.text.toString())
                 model.insertLanguage(lang)
                 binding.newLanguage.text.clear()
             }
@@ -87,7 +90,7 @@ class ManageLanguagesActivity : AppCompatActivity() {
 
     }
 
-    fun notifyError() {
+    private fun notifyError() {
         Toast.makeText(this,"Une erreur est survenue !",Toast.LENGTH_SHORT).show()
     }
 }
