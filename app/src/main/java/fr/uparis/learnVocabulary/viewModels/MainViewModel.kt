@@ -9,7 +9,7 @@ import kotlin.concurrent.thread
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val dao = (application as LearnVocabularyApplication).database.getDAO()
+    private val dao = (application as LearnVocabularyApplication).database.getDAO()
 
     var loadInfo = MutableLiveData<List<Language>>(emptyList())
     fun loadAllLanguages() {

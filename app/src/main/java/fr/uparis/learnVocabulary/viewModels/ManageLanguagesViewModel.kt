@@ -9,7 +9,7 @@ import kotlin.concurrent.thread
 
 class ManageLanguagesViewModel (application: Application) : AndroidViewModel(application) {
 
-    val dao = (application as LearnVocabularyApplication).database.getDAO()
+    private val dao = (application as LearnVocabularyApplication).database.getDAO()
 
     var loadInfo = MutableLiveData<List<Language>>(emptyList())
     fun loadAllLanguages() {
@@ -18,17 +18,17 @@ class ManageLanguagesViewModel (application: Application) : AndroidViewModel(app
         }
     }
 
-    var insertInfo = MutableLiveData<Int>(0)
+    var insertInfo = MutableLiveData(0)
     fun insertLanguage(vararg lang: Language) {
         thread {
-            val l = dao.insertLanguage(*lang)
-            insertInfo.postValue(l.fold(0) {acc: Int, l: Long ->
+            val list = dao.insertLanguage(*lang)
+            insertInfo.postValue(list.fold(0) {acc: Int, l: Long ->
                 if(l >= 0) acc + 1 else acc
             })
         }
     }
 
-    var deleteInfo = MutableLiveData<Int>(0)
+    var deleteInfo = MutableLiveData(0)
     fun deleteLanguage(vararg lang : Language) {
         thread {
             val l = dao.deleteLanguage(*lang)

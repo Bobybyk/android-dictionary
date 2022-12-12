@@ -1,7 +1,5 @@
 package fr.uparis.learnVocabulary
 
-import android.R
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,7 @@ import fr.uparis.learnVocabulary.database.entities.Language
 import fr.uparis.learnVocabulary.databinding.LanguageDisplayLayoutBinding
 
 
-class LanguagesListRecyclerViewAdapter(var langs : MutableList<Language>, var colorEven : Int, var colorOdd: Int, var colorSelected : Int) : RecyclerView.Adapter<LanguagesListRecyclerViewAdapter.VH>() {
+class LanguagesListRecyclerViewAdapter(private var langs : MutableList<Language>, private var colorEven : Int, private var colorOdd: Int, private var colorSelected : Int) : RecyclerView.Adapter<LanguagesListRecyclerViewAdapter.VH>() {
 
     //The list containing the selected elements
     private var checked : MutableList<Language> = mutableListOf()
@@ -21,10 +19,10 @@ class LanguagesListRecyclerViewAdapter(var langs : MutableList<Language>, var co
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val binding = LanguageDisplayLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
-        var view = VH(binding)
+        val view = VH(binding)
 
         binding.root.setOnClickListener {
-            var item = langs[view.absoluteAdapterPosition]
+            val item = langs[view.absoluteAdapterPosition]
 
             if(checked.contains(item)) {
                 checked.remove(item)
@@ -51,7 +49,7 @@ class LanguagesListRecyclerViewAdapter(var langs : MutableList<Language>, var co
     fun getSelected() = checked
 
     //functionused to set the color of elements inside the recycler depending on their position
-    fun setColor(item : View, position: Int) {
+    private fun setColor(item : View, position: Int) {
 
         if(position % 2 == 0)
             (item as CardView).setCardBackgroundColor(colorEven)
