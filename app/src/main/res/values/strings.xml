@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">L\'appli Coooolox</string>
+    <string name="app_name">Mon Dictionnaire</string>
+    <string name="shared_preferences_name">fr.uparis.learnVocabulary</string>
+    <string name="number_of_sessions_per_day">sessionsPerDay</string>
+    <string name="number_of_words_per_session">wordsPerSession</string>
 </resources>

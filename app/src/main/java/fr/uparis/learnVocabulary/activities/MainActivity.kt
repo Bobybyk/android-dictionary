@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
+import fr.uparis.learnVocabulary.services.LearningService
 import fr.uparis.learnVocabulary.viewModels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        launchService()
 
         model.loadAllLanguages()
 
@@ -56,5 +58,12 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         model.loadAllLanguages()
+    }
+
+    private fun launchService() {
+        val intent = Intent(this, LearningService::class.java).apply {
+            action = "test"
+        }
+        applicationContext.startService(intent)
     }
 }
