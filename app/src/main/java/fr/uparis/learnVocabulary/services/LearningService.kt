@@ -7,9 +7,7 @@ import android.content.SharedPreferences
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.activities.MainActivity
 
@@ -54,7 +52,7 @@ class LearningService : Service() {
         val pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(
+        alarmManager.setExact(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             SystemClock.elapsedRealtime() + 10 * 1000,
             pendingIntent
@@ -92,6 +90,6 @@ class LearningService : Service() {
             .setAutoCancel(true)
             .build()
 
-            notificationManager.notify(15, notification)
+        notificationManager.notify(15, notification)
     }
 }
