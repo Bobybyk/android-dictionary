@@ -38,7 +38,7 @@ class LearningService : Service() {
             null -> Log.d(null, "no action")
         }
 
-        return START_REDELIVER_INTENT
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -54,7 +54,7 @@ class LearningService : Service() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 10 * 1000,
+            SystemClock.elapsedRealtime() + 5 * 1000,
             pendingIntent
         )
     }
