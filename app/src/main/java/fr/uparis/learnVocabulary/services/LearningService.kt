@@ -3,7 +3,9 @@ package fr.uparis.learnVocabulary.services
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
@@ -22,20 +24,37 @@ class LearningService : Service() {
         var sessionsPerDay = sharedPref.getInt(getString(R.string.number_of_sessions_per_day), 1).toString()
         var wordsPerSession = sharedPref.getInt(getString(R.string.number_of_words_per_session), 10).toString()
 
+        createNotificationChannel()
+
         when(intent?.action) {
             "test" -> {
                 Log.d(null, "action test")
-                setAlarm()
+                sendNotification()
             }
             "wakeup" -> {
                 Log.d(null, "wakeup")
-                createNotificationChannel()
                 sendNotification()
             }
             "notificationClosed" -> {
                 Log.d(null, "Word known")
+                setAlarm()
             }
-            null -> Log.d(null, "no action")
+            "notificationButtonClicked" -> {
+                Log.d(null, "Word refreshed")
+
+                val urlPrefix = "https://larousse.fr/dictionnaires/francais-anglais/test"
+                val webPage : Uri = Uri.parse( "$urlPrefix")
+                val browserIntent = Intent(Intent.ACTION_VIEW, webPage)
+                browserIntent.flags = FLAG_ACTIVITY_NEW_TASK
+                startActivity(browserIntent)
+
+                notificationManager.cancel(15)
+
+                setAlarm()
+            }
+            null -> {
+                setAlarm()
+            }
         }
 
         return START_STICKY
@@ -80,14 +99,18 @@ class LearningService : Service() {
         val clickIntent = Intent(this, MainActivity::class.java)
         val clickPendingIntent = PendingIntent.getActivity(this, 0, clickIntent,PendingIntent.FLAG_IMMUTABLE)
 
+        val buttonIntent = Intent(this, LearningService::class.java).apply {
+            action = "notificationButtonClicked"
+        }
+        val pendingButtonIntent = PendingIntent.getService(this, 0, buttonIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(this, CHANNELID)
             .setContentTitle("Notification de test")
             .setContentText("Bonjour bonjour")
             .setDeleteIntent(closePendingIntent)
             .setContentIntent(clickPendingIntent)
+            .addAction(R.drawable.ic_launcher_background, "Voir traduction", pendingButtonIntent)
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setAutoCancel(true)
             .build()
 
         notificationManager.notify(15, notification)
