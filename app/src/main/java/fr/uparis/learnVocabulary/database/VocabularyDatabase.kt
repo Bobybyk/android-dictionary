@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
 
-@Database(entities = [Language::class], version = 6)
+@Database(entities = [Language::class, Dictionary::class], version = 6)
 abstract class VocabularyDatabase : RoomDatabase(){
 
     abstract fun getDAO() : VocabularyDAO
