@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
 
-@Database(entities = [Language::class, Dictionary::class], version = 6)
+@Database(entities = [Language::class, Dictionary::class], version = 6, exportSchema = false)
 abstract class VocabularyDatabase : RoomDatabase(){
 
     abstract fun getDAO() : VocabularyDAO
