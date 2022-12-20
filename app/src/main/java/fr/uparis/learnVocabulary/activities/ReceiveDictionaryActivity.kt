@@ -16,6 +16,7 @@ import fr.uparis.learnVocabulary.viewModels.ReceiveDictionaryViewModel
 class ReceiveDictionaryActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityReceiveDictionaryBinding
+    private lateinit var url : String
 
     val model by lazy {
         ViewModelProvider(this)[ReceiveDictionaryViewModel::class.java]
@@ -27,12 +28,10 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if(intent.action.equals( "android.intent.action.SEND" )){
-            val txt = intent.extras?.getString( "android.intent.extra.TEXT" )
-            if (txt != null) {
-                Log.i("ReceiveDictionnaryActivity", txt)
-                
-            }
+            url = intent.extras!!.getString( "android.intent.extra.TEXT" ).toString()
         }
+
+        binding.receivedURL.text = url
 
         //update list after dictionary insert query
         model.insertInfo.observe(this) {
