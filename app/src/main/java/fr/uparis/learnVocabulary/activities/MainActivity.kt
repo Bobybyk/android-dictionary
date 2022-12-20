@@ -5,17 +5,25 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import fr.uparis.learnVocabulary.R
+import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
+import fr.uparis.learnVocabulary.services.LearningService
+import fr.uparis.learnVocabulary.viewModels.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    private val model by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        launchService()
+
+        model.loadAllLanguages()
 
         //when the button is clicked, launche the setting activity
         binding.settings.setOnClickListener {
@@ -37,14 +45,25 @@ class MainActivity : AppCompatActivity() {
             startActivity( intent )
         }
 
-        //Populate the spinners with the languages
-        ArrayAdapter.createFromResource(this, R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
+        model.loadInfo.observe(this) { it ->
+            val langs : List<String> = it.map { it.lang }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, langs)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.lFrom.adapter = adapter
-        }
-        ArrayAdapter.createFromResource(this, R.array.languages,android.R.layout.simple_spinner_item).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.lTo.adapter = adapter
+            binding.dico.adapter = adapter
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        model.loadAllLanguages()
+    }
+
+    private fun launchService() {
+        val intent = Intent(this, LearningService::class.java).apply {
+            action = "test"
+        }
+        applicationContext.startService(intent)
     }
 }
