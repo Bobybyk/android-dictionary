@@ -24,6 +24,10 @@ interface VocabularyDAO {
     @Query("SELECT * FROM Dictionary")
     fun loadAllDictionaries() : List<Dictionary>
 
+        //get the dictionaries for given souce and target languages
+    @Query("SELECT * FROM Dictionary WHERE sourceLanguage = :src AND destinationLanguage= :dst")
+    fun getDictionaries(src: String, dst: String) : List<Dictionary>
+
     @Delete
     fun deleteDictionary(vararg dico : Dictionary) : Int
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import fr.uparis.learnVocabulary.LearnVocabularyApplication
 import fr.uparis.learnVocabulary.database.entities.Dictionary
+import fr.uparis.learnVocabulary.database.entities.Language
 import kotlin.concurrent.thread
 
 class ReceiveDictionaryViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,6 +33,13 @@ class ReceiveDictionaryViewModel(application: Application) : AndroidViewModel(ap
         thread {
             val d = dao.deleteDictionary(*dico)
             deleteInfo.postValue(d)
+        }
+    }
+
+    var langLoadInfo = MutableLiveData<List<Language>>(emptyList())
+    fun loadAllLanguages() {
+        thread {
+            langLoadInfo.postValue(dao.loadAllLanguages())
         }
     }
 }

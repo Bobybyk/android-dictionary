@@ -1,9 +1,11 @@
 package fr.uparis.learnVocabulary.activities
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -31,24 +33,22 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
             url = intent.extras!!.getString( "android.intent.extra.TEXT" ).toString()
         }
 
+        //display the received URL
         binding.receivedURL.text = url
 
-        //update list after dictionary insert query
-        model.insertInfo.observe(this) {
-            if(it.equals(0))
-                return@observe
-            else if(it.equals(-1))
-                notifyError()
-            model.loadAllDictionaries()
+        //load the existing languages to select dictionary source and destination languages
+        model.loadAllLanguages()
+        model.langLoadInfo.observe(this) {
+            val langs : List<String> = it.map { it.lang }
+            val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, langs)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.lFrom.adapter = adapter
+            binding.lTo.adapter = adapter
         }
 
-        //update list after deleting dictionary
-        model.deleteInfo.observe(this) {
-            if(it.equals(0))
-                return@observe
-            else if(it.equals(-1))
-                notifyError()
-            model.loadAllDictionaries()
+        //add the dictionary to the datbase when clicking the button
+        binding.add.setOnClickListener {
+            model.insertDictionary(Dictionary(url, binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
         }
     }
 
