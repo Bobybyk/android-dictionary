@@ -41,4 +41,7 @@ interface VocabularyDAO {
 
     @Query("SELECT * FROM Word WHERE sourceLanguage = :src AND destinationLanguage = :dst")
     fun loadWordParams(src: String, dst: String) : List<Word>
+
+    @Delete
+    fun deleteWord(vararg word : Word) : Int
 }

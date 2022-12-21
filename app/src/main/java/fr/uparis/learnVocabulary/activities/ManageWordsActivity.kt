@@ -47,6 +47,10 @@ class ManageWordsActivity : AppCompatActivity() {
             model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
         }
 
+        binding.delete.setOnClickListener {
+            model.deleteWord(*adapter.getSelected().toTypedArray())
+        }
+
         model.insertInfo.observe(this) {
             if(it >= 0)
                 binding.newWord.text.clear()

@@ -35,4 +35,11 @@ class ManageWordsViewModel(application: Application) : AndroidViewModel(applicat
             wordLoadInfo.postValue(dao.loadAllWords())
         }
     }
+
+    var deleteInfo = MutableLiveData(0)
+    fun deleteWord(vararg word: Word) {
+        thread {
+            deleteInfo.postValue(dao.deleteWord(*word))
+        }
+    }
 }
