@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val model by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
+    private var dictionaries = hashMapOf<String, Dictionary>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,15 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         //Searches the word written in the edit text when the button is clicked
         binding.search.setOnClickListener {
-            var url : String
-            if(binding.dico.selectedItem == "Google") {     //if no dictionary has been added by the user
-                url = "http://www.google.fr/search?q=traduction+${binding.lFrom.selectedItem}+${binding.lTo.selectedItem}+${binding.searchWord.text}"
+            val url = if(binding.dico.selectedItem.toString() == "Google") {
+                "${dictionaries["Google"]!!.url}+${binding.lFrom.selectedItem}+${binding.lTo.selectedItem}+${binding.searchWord.text}"
             } else {
-                val dicoURL = (model.dicoLoadInfo.value!!.first {
-                    it.sourceLanguage == binding.lFrom.selectedItem &&
-                            it.destinationLanguage == binding.lTo.selectedItem
-                }).url      //get the url of the selected dictionary
-                url = "$dicoURL/${binding.searchWord.text}"
+                "${dictionaries[binding.dico.selectedItem]!!.url}/${binding.searchWord.text}"
             }
 
             //launch the browser
@@ -73,17 +70,13 @@ class MainActivity : AppCompatActivity() {
         //observers to display the dictionaries available
         model.dicoLoadInfo.observe(this) { it ->
 
+            dictionaries.clear()
             it.forEach { it2 ->
-                Log.d(null, it2.toString())
+                dictionaries[it2.url.split('/')[2]] = it2
             }
+            dictionaries["Google"] = Dictionary("http://www.google.fr/search?q=traduction+", "*", "*")
 
-            val list : List<String> = if(it.isNotEmpty()) {
-                it.map { it.url }
-            } else {
-                listOf("Google")
-            }
-
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dictionaries.keys.toTypedArray())
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dico.adapter = adapter
         }
@@ -108,7 +101,6 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         model.loadAllLanguages()
-        model.loadAllDictionaries()
     }
 
     private fun launchService() {
@@ -116,9 +108,5 @@ class MainActivity : AppCompatActivity() {
             action = "test"
         }
         applicationContext.startService(intent)
-    }
-
-    private fun loadDictionaries(src: String, dst: String) {
-
     }
 }
