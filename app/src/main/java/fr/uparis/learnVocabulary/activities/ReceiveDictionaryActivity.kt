@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
+import fr.uparis.learnVocabulary.database.entities.Word
 import fr.uparis.learnVocabulary.databinding.ActivityReceiveDictionaryBinding
 import fr.uparis.learnVocabulary.viewModels.ManageLanguagesViewModel
 import fr.uparis.learnVocabulary.viewModels.ReceiveDictionaryViewModel
@@ -49,6 +50,7 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
         //add the dictionary to the datbase when clicking the button
         binding.add.setOnClickListener {
             model.insertDictionary(Dictionary(url, binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
+            model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
             finish()
         }
     }

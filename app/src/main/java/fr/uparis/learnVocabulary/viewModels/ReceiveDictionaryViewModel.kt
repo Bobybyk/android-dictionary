@@ -6,33 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import fr.uparis.learnVocabulary.LearnVocabularyApplication
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
+import fr.uparis.learnVocabulary.database.entities.Word
 import kotlin.concurrent.thread
 
 class ReceiveDictionaryViewModel(application: Application) : AndroidViewModel(application) {
     val dao = (application as LearnVocabularyApplication).database.getDAO()
 
-    var loadInfo = MutableLiveData<List<Dictionary>>(emptyList())
-    fun loadAllDictionaries() {
-        thread {
-            loadInfo.postValue(dao.loadAllDictionaries())
-        }
-    }
-
-    var insertInfo = MutableLiveData<Int>(0)
+    var dictionaryInsertInfo = MutableLiveData<Int>(0)
     fun insertDictionary(vararg dico : Dictionary) {
         thread {
             val d = dao.insertDictionary(*dico)
-            insertInfo.postValue(d.fold(0) {acc: Int, d: Long ->
+            dictionaryInsertInfo.postValue(d.fold(0) {acc: Int, d: Long ->
                 if (d >= 0) acc + 1 else acc
             })
-        }
-    }
-
-    var deleteInfo = MutableLiveData<Int>(0)
-    fun deleteDictionary(vararg dico : Dictionary) {
-        thread {
-            val d = dao.deleteDictionary(*dico)
-            deleteInfo.postValue(d)
         }
     }
 
@@ -40,6 +26,16 @@ class ReceiveDictionaryViewModel(application: Application) : AndroidViewModel(ap
     fun loadAllLanguages() {
         thread {
             langLoadInfo.postValue(dao.loadAllLanguages())
+        }
+    }
+
+    var wordInsertInfo = MutableLiveData<Int>(0)
+    fun insertWord(vararg word: Word) {
+        thread {
+            val list = dao.insertWord(*word)
+            wordInsertInfo.postValue(list.fold(0) {acc: Int, d: Long ->
+                if (d >= 0) acc + 1 else acc
+            })
         }
     }
 }
