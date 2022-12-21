@@ -49,8 +49,7 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
         //add the dictionary to the datbase when clicking the button
         binding.add.setOnClickListener {
             model.insertDictionary(Dictionary(url, binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
