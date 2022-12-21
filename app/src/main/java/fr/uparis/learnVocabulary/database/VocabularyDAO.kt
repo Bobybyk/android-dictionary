@@ -3,6 +3,7 @@ package fr.uparis.learnVocabulary.database
 import androidx.room.*
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
+import fr.uparis.learnVocabulary.database.entities.Word
 
 @Dao
 interface VocabularyDAO {
@@ -26,8 +27,18 @@ interface VocabularyDAO {
 
         //get the dictionaries for given souce and target languages
     @Query("SELECT * FROM Dictionary WHERE sourceLanguage = :src AND destinationLanguage= :dst")
-    fun getDictionaries(src: String, dst: String) : List<Dictionary>
+    fun loadDictionaryParams(src: String, dst: String) : List<Dictionary>
 
     @Delete
     fun deleteDictionary(vararg dico : Dictionary) : Int
+
+    //Words
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertWord(vararg word : Word) : List<Long>
+
+    @Query("SELECT * FROM Word")
+    fun loadAllWords() : List<Word>
+
+    @Query("SELECT * FROM Word WHERE sourceLanguage = :src AND destinationLanguage = :dst")
+    fun loadWordParams(src: String, dst: String) : List<Word>
 }

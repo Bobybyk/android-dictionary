@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import fr.uparis.learnVocabulary.LearnVocabularyApplication
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.database.entities.Language
+import fr.uparis.learnVocabulary.database.entities.Word
 import kotlin.concurrent.thread
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
+class ManageWordsViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = (application as LearnVocabularyApplication).database.getDAO()
 
     var langLoadInfo = MutableLiveData<List<Language>>(emptyList())
@@ -19,17 +19,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    var dicoLoadInfo = MutableLiveData<List<Dictionary>>(emptyList())
-    fun loadAllDictionaries() {
+    var insertInfo = MutableLiveData(0)
+    fun insertWord(vararg word : Word) {
         thread {
-            dicoLoadInfo.postValue(dao.loadAllDictionaries())
+            val list = dao.insertWord(*word)
+            insertInfo.postValue(list.fold(0) {acc: Int, l: Long ->
+                if(l >= 0) acc + 1 else acc
+            })
         }
     }
 
-    fun loadDicoParams(src: String, dst: String) {
+    var wordLoadInfo = MutableLiveData<List<Word>>(emptyList())
+    fun loadAllWords() {
         thread {
-            dicoLoadInfo.postValue(dao.loadDictionaryParams(src, dst))
+            wordLoadInfo.postValue(dao.loadAllWords())
         }
     }
-
 }

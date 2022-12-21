@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.browseWords?.setOnClickListener {
+            val intent = Intent(this,ManageWordsActivity::class.java)
+            startActivity(intent)
+        }
+
         //Searches the word written in the edit text when the button is clicked
         binding.search.setOnClickListener {
             val url = if(binding.dico.selectedItem.toString() == "Google") {
