@@ -1,5 +1,6 @@
 package fr.uparis.learnVocabulary.database.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
@@ -23,5 +24,6 @@ import androidx.room.ForeignKey
 data class Word(
     var word : String,
     var sourceLanguage: String,
-    var destinationLanguage: String
+    var destinationLanguage: String,
+    var timesRemembered : Int = 0
     )

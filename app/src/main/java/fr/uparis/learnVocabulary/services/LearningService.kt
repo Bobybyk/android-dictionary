@@ -10,14 +10,24 @@ import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.ViewModelProvider
+import fr.uparis.learnVocabulary.LearnVocabularyApplication
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.activities.MainActivity
+import fr.uparis.learnVocabulary.database.entities.Word
+import fr.uparis.learnVocabulary.viewModels.MainViewModel
+import kotlin.concurrent.thread
+import kotlin.random.Random
 
 class LearningService : Service() {
 
     private lateinit var sharedPref : SharedPreferences
     private val notificationManager by lazy { getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
     private val CHANNELID = "NewWord"
+
+    private val dao by lazy { (application as LearnVocabularyApplication).database.getDAO() }
+
+    private var currentWord : Word? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sharedPref = getSharedPreferences(getString(R.string.shared_preferences_name),Context.MODE_PRIVATE)
@@ -37,20 +47,23 @@ class LearningService : Service() {
             }
             "notificationClosed" -> {
                 Log.d(null, "Word known")
+                //update word in database
                 setAlarm()
             }
             "notificationButtonClicked" -> {
                 Log.d(null, "Word refreshed")
 
-                val urlPrefix = "https://larousse.fr/dictionnaires/francais-anglais/test"
-                val webPage : Uri = Uri.parse( "$urlPrefix")
-                val browserIntent = Intent(Intent.ACTION_VIEW, webPage)
-                browserIntent.flags = FLAG_ACTIVITY_NEW_TASK
-                startActivity(browserIntent)
+                thread {
+                    val dict = dao.loadDictionaryParams(currentWord!!.sourceLanguage, currentWord!!.destinationLanguage).first()
+                    val webPage : Uri = Uri.parse( "${dict.url}/${currentWord!!.word}")
+                    val browserIntent = Intent(Intent.ACTION_VIEW, webPage)
+                    browserIntent.flags = FLAG_ACTIVITY_NEW_TASK
+                    startActivity(browserIntent)
 
-                notificationManager.cancel(15)
+                    notificationManager.cancel(15)
 
-                setAlarm()
+                    setAlarm()
+                }
             }
             null -> {
                 setAlarm()
@@ -104,15 +117,39 @@ class LearningService : Service() {
         }
         val pendingButtonIntent = PendingIntent.getService(this, 0, buttonIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val notification = NotificationCompat.Builder(this, CHANNELID)
-            .setContentTitle("Poule")
-            .setContentText("Connaissez-vous la traduction de ce mot en japonais ?")
-            .setDeleteIntent(closePendingIntent)
-            .setContentIntent(clickPendingIntent)
-            .addAction(R.drawable.ic_launcher_background, "Voir traduction", pendingButtonIntent)
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .build()
+        thread { //creating a thread to allow simili-synchronous db query
+            randomWord()
 
-        notificationManager.notify(15, notification)
+            if(currentWord != null) {
+
+                val notification = NotificationCompat.Builder(this, CHANNELID)
+                    .setContentTitle("${currentWord!!.word}")
+                    .setContentText("en ${currentWord!!.destinationLanguage} ?")
+                    .setDeleteIntent(closePendingIntent)
+                    .setContentIntent(clickPendingIntent)
+                    .addAction(
+                        R.drawable.ic_launcher_background,
+                        "Voir traduction",
+                        pendingButtonIntent
+                    )
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText("Connaissez-vous la traduction de ce mot ${currentWord!!.sourceLanguage} en ${currentWord!!.destinationLanguage} ?")
+                    )
+                    .build()
+
+                notificationManager.notify(15, notification)
+
+            }
+        }
+    }
+
+    private fun randomWord() {
+        val list = dao.loadAllWords()
+        if(list.isEmpty())
+            return
+        val randomIndex = Random.nextInt(list.size)
+        currentWord = list[randomIndex]
     }
 }

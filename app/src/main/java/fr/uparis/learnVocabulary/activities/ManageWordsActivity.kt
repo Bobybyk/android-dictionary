@@ -42,7 +42,8 @@ class ManageWordsActivity : AppCompatActivity() {
         }
 
         binding.add.setOnClickListener {
-            model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
+            val newWord = Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString())
+            model.insertWord(newWord)
         }
 
         binding.delete.setOnClickListener {
