@@ -2,18 +2,23 @@ package fr.uparis.learnVocabulary.activities
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.view.get
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
 import fr.uparis.learnVocabulary.services.LearningService
 import fr.uparis.learnVocabulary.viewModels.MainViewModel
+import kotlin.collections.List
+import kotlin.collections.forEach
+import kotlin.collections.get
+import kotlin.collections.hashMapOf
+import kotlin.collections.map
+import kotlin.collections.set
+import kotlin.collections.toTypedArray
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //observers to display the dictionaries available
-        model.dicoLoadInfo.observe(this) { it ->
+        model.dicoLoadInfo.observe(this) {
 
             dictionaries.clear()
             it.forEach { it2 ->

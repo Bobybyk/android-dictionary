@@ -2,10 +2,9 @@ package fr.uparis.learnVocabulary.activities
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.databinding.ActivitySettingsBinding
 

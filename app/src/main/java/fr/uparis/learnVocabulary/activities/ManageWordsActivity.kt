@@ -1,6 +1,5 @@
 package fr.uparis.learnVocabulary.activities
 
-import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +14,7 @@ import fr.uparis.learnVocabulary.viewModels.ManageWordsViewModel
 
 class ManageWordsActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityManageWordsBinding
+    private lateinit var binding : ActivityManageWordsBinding
     private lateinit var adapter : WordsListRecyclerViewAdapter
     private val model by lazy {
         ViewModelProvider(this)[ManageWordsViewModel::class.java]
@@ -36,7 +35,7 @@ class ManageWordsActivity : AppCompatActivity() {
         //observer to display the languages available
         model.langLoadInfo.observe(this) { it ->
             val langs : List<String> = it.map { it.lang }
-            val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, langs)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, langs)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.lFrom.adapter = adapter
             binding.lTo.adapter = adapter
@@ -50,10 +49,19 @@ class ManageWordsActivity : AppCompatActivity() {
             model.deleteWord(*adapter.getSelected().toTypedArray())
         }
 
-        model.insertInfo.observe(this) {
-            if(it >= 0)
+        model.deleteInfo.observe(this) {
+            if(it >= 0) {
                 binding.newWord.text.clear()
-            else
+                model.loadAllWords()
+            } else
+                Toast.makeText(this,"Une erreur est survenue !", Toast.LENGTH_SHORT).show()
+        }
+
+        model.insertInfo.observe(this) {
+            if(it >= 0) {
+                binding.newWord.text.clear()
+                model.loadAllWords()
+            } else
                 Toast.makeText(this,"Une erreur est survenue !", Toast.LENGTH_SHORT).show()
         }
 
