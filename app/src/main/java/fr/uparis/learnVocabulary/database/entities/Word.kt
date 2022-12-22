@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 
 
 @Entity(
-    primaryKeys = ["word", "sourceLanguage"],
+    primaryKeys = ["word", "sourceLanguage", "destinationLanguage"],
     foreignKeys = [
         ForeignKey(
             entity = Language::class,
