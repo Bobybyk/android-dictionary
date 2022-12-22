@@ -1,13 +1,13 @@
 package fr.uparis.learnVocabulary.activities
 
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import fr.uparis.learnVocabulary.LanguagesListRecyclerViewAdapter
+import fr.uparis.learnVocabulary.recyclerViews.LanguagesListRecyclerViewAdapter
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.database.entities.Language
 import fr.uparis.learnVocabulary.databinding.ActivityManageLanguagesBinding
@@ -71,7 +71,6 @@ class ManageLanguagesActivity : AppCompatActivity() {
                 notifyError()
                 return@observe
             }
-            Log.d(null,"deleted one language")
             model.loadAllLanguages()
         }
 
@@ -85,7 +84,17 @@ class ManageLanguagesActivity : AppCompatActivity() {
         }
 
         binding.delete.setOnClickListener {
-            model.deleteLanguage(*adapter.getSelected().toTypedArray())
+            AlertDialog.Builder(this)
+                .setMessage("Êtes-vous sûr.e de vouloir supprimer cette langue ?\n(Cela supprimera tous les dictionnaires et mots associés)")
+                .setCancelable(false)
+                .setPositiveButton("OUI") { d, _ ->
+                    model.deleteLanguage(*adapter.getSelected().toTypedArray())
+                    d.dismiss()
+                }
+                .setNegativeButton("NON") { d, _ ->
+                    d.dismiss()
+                }
+                .show()
         }
 
     }

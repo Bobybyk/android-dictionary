@@ -1,4 +1,4 @@
-package fr.uparis.learnVocabulary
+package fr.uparis.learnVocabulary.recyclerViews
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,18 +6,19 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import fr.uparis.learnVocabulary.database.entities.Language
+import fr.uparis.learnVocabulary.database.entities.Word
 import fr.uparis.learnVocabulary.databinding.LanguageDisplayLayoutBinding
+import fr.uparis.learnVocabulary.databinding.WordDisplayLayoutBinding
 
-
-class LanguagesListRecyclerViewAdapter(private var langs : MutableList<Language>, private var colorEven : Int, private var colorOdd: Int, private var colorSelected : Int) : RecyclerView.Adapter<LanguagesListRecyclerViewAdapter.VH>() {
+class WordsListRecyclerViewAdapter(private var langs : MutableList<Word>, private var colorEven : Int, private var colorOdd: Int, private var colorSelected : Int) : RecyclerView.Adapter<WordsListRecyclerViewAdapter.VH>() {
 
     //The list containing the selected elements
-    private var checked : MutableList<Language> = mutableListOf()
+    private var checked : MutableList<Word> = mutableListOf()
 
-    class VH(val binding : LanguageDisplayLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+    class VH(val binding : WordDisplayLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = LanguageDisplayLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = WordDisplayLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
         val view = VH(binding)
 
@@ -37,7 +38,9 @@ class LanguagesListRecyclerViewAdapter(private var langs : MutableList<Language>
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.binding.langName.text = langs[position].lang
+        holder.binding.word.text = langs[position].word
+        holder.binding.srcLang.text = langs[position].sourceLanguage
+        holder.binding.dstLang.text = langs[position].destinationLanguage
 
         setColor(holder.itemView,position)
     }
@@ -56,5 +59,4 @@ class LanguagesListRecyclerViewAdapter(private var langs : MutableList<Language>
         else
             (item as CardView).setCardBackgroundColor(colorOdd)
     }
-
 }
