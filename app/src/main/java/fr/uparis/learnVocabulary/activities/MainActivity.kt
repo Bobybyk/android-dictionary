@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun launchService() {
         val intent = Intent(this, LearningService::class.java).apply {
-            action = "test"
+            action = "start"
         }
         applicationContext.startService(intent)
     }

@@ -27,7 +27,7 @@ class LearningService : Service() {
         createNotificationChannel()
 
         when(intent?.action) {
-            "test" -> {
+            "start" -> {
                 Log.d(null, "action test")
                 sendNotification()
             }
@@ -105,8 +105,8 @@ class LearningService : Service() {
         val pendingButtonIntent = PendingIntent.getService(this, 0, buttonIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(this, CHANNELID)
-            .setContentTitle("Notification de test")
-            .setContentText("Bonjour bonjour")
+            .setContentTitle("Poule")
+            .setContentText("Connaissez-vous la traduction de ce mot en japonais ?")
             .setDeleteIntent(closePendingIntent)
             .setContentIntent(clickPendingIntent)
             .addAction(R.drawable.ic_launcher_background, "Voir traduction", pendingButtonIntent)
