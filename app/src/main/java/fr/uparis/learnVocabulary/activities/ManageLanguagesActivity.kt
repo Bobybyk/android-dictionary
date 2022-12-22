@@ -3,12 +3,11 @@ package fr.uparis.learnVocabulary.activities
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import fr.uparis.learnVocabulary.LanguagesListRecyclerViewAdapter
+import fr.uparis.learnVocabulary.recyclerViews.LanguagesListRecyclerViewAdapter
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.database.entities.Language
 import fr.uparis.learnVocabulary.databinding.ActivityManageLanguagesBinding

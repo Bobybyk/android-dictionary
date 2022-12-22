@@ -1,4 +1,4 @@
-package fr.uparis.learnVocabulary
+package fr.uparis.learnVocabulary.recyclerViews
 
 import android.view.LayoutInflater
 import android.view.View

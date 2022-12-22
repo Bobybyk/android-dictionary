@@ -47,9 +47,9 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
             binding.lTo.adapter = adapter
         }
 
-        //add the dictionary to the datbase when clicking the button
+        //add the dictionary to the database when clicking the button
         binding.add.setOnClickListener {
-            model.insertDictionary(Dictionary(url, binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
+            model.insertDictionary(Dictionary(url.substring(0,url.lastIndexOf('/')), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
             model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
             finish()
         }

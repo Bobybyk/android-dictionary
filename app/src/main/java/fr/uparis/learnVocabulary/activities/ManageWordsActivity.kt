@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import fr.uparis.learnVocabulary.LanguagesListRecyclerViewAdapter
 import fr.uparis.learnVocabulary.database.entities.Word
 import fr.uparis.learnVocabulary.databinding.ActivityManageWordsBinding
 import fr.uparis.learnVocabulary.recyclerViews.WordsListRecyclerViewAdapter
