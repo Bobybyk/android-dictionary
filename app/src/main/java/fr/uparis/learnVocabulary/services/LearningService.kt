@@ -48,7 +48,11 @@ class LearningService : Service() {
             "notificationClosed" -> {
                 Log.d(null, "Word known")
                 //update word in database
-                setAlarm()
+                currentWord!!.timesRemembered++
+                thread {
+                    dao.updateWord(currentWord!!)
+                    setAlarm()
+                }
             }
             "notificationButtonClicked" -> {
                 Log.d(null, "Word refreshed")
@@ -140,6 +144,8 @@ class LearningService : Service() {
                     .build()
 
                 notificationManager.notify(15, notification)
+
+                Log.d(null, "$currentWord")
 
             }
         }
