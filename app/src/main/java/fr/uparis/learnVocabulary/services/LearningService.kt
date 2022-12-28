@@ -47,6 +47,7 @@ class LearningService : Service() {
             }
             "notificationClosed" -> {
                 Log.d(null, "Word known")
+
                 //update word in database
                 currentWord!!.timesRemembered++
                 thread {
