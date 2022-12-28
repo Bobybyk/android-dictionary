@@ -59,7 +59,7 @@ class LearningService : Service() {
                 Log.d(null, "Word refreshed")
 
                 thread {
-                    val dict = dao.loadDictionaryParams(currentWord!!.sourceLanguage, currentWord!!.destinationLanguage).first()
+                    val dict = dao.loadDictionaryParams(currentWord!!.sourceLanguage, currentWord!!.destinationLanguage).first { it.favoriteDictionary }
                     val webPage : Uri = Uri.parse( "${dict.url}/${currentWord!!.word}")
                     val browserIntent = Intent(Intent.ACTION_VIEW, webPage)
                     browserIntent.flags = FLAG_ACTIVITY_NEW_TASK

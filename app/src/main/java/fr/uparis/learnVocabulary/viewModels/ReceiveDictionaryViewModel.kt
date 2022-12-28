@@ -22,6 +22,20 @@ class ReceiveDictionaryViewModel(application: Application) : AndroidViewModel(ap
         }
     }
 
+    fun removeFavoriteDictionary(vararg dico: Dictionary) {
+        thread {
+            dao.updateDictionaries(*dico)
+        }
+    }
+
+    val dictionaryLoadInfo = MutableLiveData<List<Dictionary>>(mutableListOf())
+    fun loadDictionaries() {
+        thread {
+            val list = dao.loadAllDictionaries()
+            dictionaryLoadInfo.postValue(list)
+        }
+    }
+
     var langLoadInfo = MutableLiveData<List<Language>>(emptyList())
     fun loadAllLanguages() {
         thread {

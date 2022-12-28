@@ -80,15 +80,20 @@ class MainActivity : AppCompatActivity() {
         //observers to display the dictionaries available
         model.dicoLoadInfo.observe(this) {
 
+            var favorite : Int = 0
+
             dictionaries.clear()
-            it.forEach { it2 ->
-                dictionaries[it2.url.split('/')[2]] = it2
+            it.forEachIndexed { index, element ->
+                dictionaries[element.url.split('/')[2]] = element
+                if(element.favoriteDictionary)
+                    favorite = index
             }
             dictionaries["Google"] = Dictionary("http://www.google.fr/search?q=traduction+", "*", "*")
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dictionaries.keys.toTypedArray())
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dico.adapter = adapter
+            binding.dico.setSelection(favorite)
         }
 
         //listeners to update the spinner with the right dictionary list when selecting languages in the spinners
