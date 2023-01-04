@@ -3,6 +3,7 @@ package fr.uparis.learnVocabulary.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -80,19 +81,23 @@ class MainActivity : AppCompatActivity() {
         //observers to display the dictionaries available
         model.dicoLoadInfo.observe(this) {
 
+            Log.d(null, "$it")
+
             var favorite : Int = 0
 
             dictionaries.clear()
+            dictionaries["Google"] = Dictionary("http://www.google.fr/search?q=traduction+", "*", "*")
             it.forEachIndexed { index, element ->
                 dictionaries[element.url.split('/')[2]] = element
                 if(element.favoriteDictionary)
                     favorite = index
             }
-            dictionaries["Google"] = Dictionary("http://www.google.fr/search?q=traduction+", "*", "*")
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dictionaries.keys.toTypedArray())
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dico.adapter = adapter
+
+            Log.d(null, "$favorite")
             binding.dico.setSelection(favorite)
         }
 
