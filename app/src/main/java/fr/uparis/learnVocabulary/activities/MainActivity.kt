@@ -8,9 +8,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
+import fr.uparis.learnVocabulary.recyclerViews.MainRecyclerVIewAdapter
 import fr.uparis.learnVocabulary.services.LearningService
 import fr.uparis.learnVocabulary.viewModels.MainViewModel
 import kotlin.collections.List
@@ -115,6 +119,14 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {TODO("Not yet implemented")}
         }
+
+        binding.recycle?.layoutManager = LinearLayoutManager(this)
+        model.loadAllDictionaries()
+        model.dicoAllLoadInfo.observe(this) {
+            Log.d(null, "$it")
+            binding.recycle?.adapter = MainRecyclerVIewAdapter(it, resources.getColor(R.color.even,null), resources.getColor(R.color.odd,null))
+        }
+
     }
 
     //action to execute when the user comes back to the activity

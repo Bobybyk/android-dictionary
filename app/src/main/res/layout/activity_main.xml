@@ -71,12 +71,12 @@
     </LinearLayout>
 
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Hello World!\n Bientôt cette appli va devenir super hype\n Stay tuned !" />
+        android:id="@+id/recycle"/>
 
     <Button
         android:id="@+id/settings"

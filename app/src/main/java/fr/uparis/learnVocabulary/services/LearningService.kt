@@ -10,14 +10,11 @@ import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import fr.uparis.learnVocabulary.LearnVocabularyApplication
 import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.activities.MainActivity
 import fr.uparis.learnVocabulary.database.entities.Word
-import fr.uparis.learnVocabulary.viewModels.MainViewModel
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 import kotlin.concurrent.thread
 import kotlin.random.Random
@@ -64,6 +61,7 @@ class LearningService : Service() {
             "wakeup" -> {
                 Log.d(null, "wakeup")
                 sendNotification()
+
             }
             "notificationClosed" -> {
                 Log.d(null, "Word known")
@@ -229,9 +227,6 @@ class LearningService : Service() {
                     .build()
 
                 notificationManager.notify(15, notification)
-
-                Log.d(null, "$currentWord")
-
             }
         }
     }
