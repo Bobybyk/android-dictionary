@@ -25,5 +25,6 @@ import androidx.room.Index
 data class Dictionary(
     val url : String,
     val sourceLanguage: String,
-    val destinationLanguage: String
+    val destinationLanguage: String,
+    var favoriteDictionary: Boolean = false
 )

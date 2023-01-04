@@ -32,9 +32,15 @@ interface VocabularyDAO {
     @Delete
     fun deleteDictionary(vararg dico : Dictionary) : Int
 
+    @Update
+    fun updateDictionaries(vararg dico: Dictionary) : Int
+
     //Words
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertWord(vararg word : Word) : List<Long>
+
+    @Update
+    fun updateWord(vararg word : Word) : Int
 
     @Query("SELECT * FROM Word")
     fun loadAllWords() : List<Word>

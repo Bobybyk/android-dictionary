@@ -92,12 +92,6 @@
                 android:id="@+id/stopTime"/>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="AJouter personnalisation langues pour certains jours"
-            android:textColor="@color/teal_200"/>
-
     </LinearLayout>
 
 </LinearLayout>

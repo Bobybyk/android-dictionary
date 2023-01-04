@@ -6,10 +6,6 @@
     card_view:cardCornerRadius="4dp"
     android:layout_marginBottom="4dp"
     >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <GridLayout
             android:layout_width="match_parent"
@@ -17,37 +13,7 @@
             android:columnCount="2"
             android:padding="16dp">
 
-            <LinearLayout
-                android:layout_width="0sp"
-                android:layout_columnWeight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mot"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/word"
-                    android:padding="6dp"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0sp"
-                android:layout_columnWeight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre de fois rappelé"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/timesRemembered"
-                    android:padding="6dp"/>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0sp"
@@ -72,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Langue source"
+                    android:text="Langue de destination"
                     android:textStyle="bold"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,25 +46,22 @@
                     android:id="@+id/dstLang"
                     android:padding="6dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0sp"
+                android:layout_columnWeight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="URL"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/url"
+                    android:padding="6dp"/>
+            </LinearLayout>
         </GridLayout>
-
-        <!-- line to separate -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black"
-            android:visibility="gone"
-            android:id="@+id/ruler"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingVertical="4dp"
-            android:text="Vous connaissez ce mot !"
-            android:visibility="gone"
-            android:id="@+id/knownMessage"/>
-
-    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

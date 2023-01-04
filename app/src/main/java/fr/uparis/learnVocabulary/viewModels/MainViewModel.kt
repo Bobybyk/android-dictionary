@@ -19,12 +19,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    var dicoLoadInfo = MutableLiveData<List<Dictionary>>(emptyList())
+    var dicoAllLoadInfo = MutableLiveData<List<Dictionary>>(emptyList())
     fun loadAllDictionaries() {
         thread {
-            dicoLoadInfo.postValue(dao.loadAllDictionaries())
+            dicoAllLoadInfo.postValue(dao.loadAllDictionaries())
         }
     }
+
+    var dicoLoadInfo = MutableLiveData<List<Dictionary>>(emptyList())
 
     fun loadDicoParams(src: String, dst: String) {
         thread {

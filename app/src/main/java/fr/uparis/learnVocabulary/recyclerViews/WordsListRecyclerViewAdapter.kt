@@ -2,12 +2,11 @@ package fr.uparis.learnVocabulary.recyclerViews
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import fr.uparis.learnVocabulary.database.entities.Language
 import fr.uparis.learnVocabulary.database.entities.Word
-import fr.uparis.learnVocabulary.databinding.LanguageDisplayLayoutBinding
 import fr.uparis.learnVocabulary.databinding.WordDisplayLayoutBinding
 
 class WordsListRecyclerViewAdapter(private var langs : MutableList<Word>, private var colorEven : Int, private var colorOdd: Int, private var colorSelected : Int) : RecyclerView.Adapter<WordsListRecyclerViewAdapter.VH>() {
@@ -41,6 +40,12 @@ class WordsListRecyclerViewAdapter(private var langs : MutableList<Word>, privat
         holder.binding.word.text = langs[position].word
         holder.binding.srcLang.text = langs[position].sourceLanguage
         holder.binding.dstLang.text = langs[position].destinationLanguage
+        holder.binding.timesRemembered.text = langs[position].timesRemembered.toString()
+
+        if(langs[position].timesRemembered > 4) {
+            holder.binding.ruler.visibility = VISIBLE
+            holder.binding.knownMessage.visibility = VISIBLE
+        }
 
         setColor(holder.itemView,position)
     }

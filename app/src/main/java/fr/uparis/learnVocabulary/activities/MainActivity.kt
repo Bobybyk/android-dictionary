@@ -3,13 +3,19 @@ package fr.uparis.learnVocabulary.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.database.entities.Dictionary
 import fr.uparis.learnVocabulary.databinding.ActivityMainBinding
+import fr.uparis.learnVocabulary.recyclerViews.MainRecyclerVIewAdapter
 import fr.uparis.learnVocabulary.services.LearningService
 import fr.uparis.learnVocabulary.viewModels.MainViewModel
 import kotlin.collections.List
@@ -33,8 +39,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //launch the learning service when the activity is created
-        launchService()
+        if(savedInstanceState != null) {
+            binding.lFrom.setSelection(savedInstanceState.getInt("srcLangSelected"))
+            binding.lTo.setSelection(savedInstanceState.getInt("srcLangSelected"))
+            binding.dico.setSelection(savedInstanceState.getInt("selectedDico"))
+        } else {
+            //launch the learning service when the activity is created
+            launchService()
+            //load languages when creating the activity
+            model.loadAllLanguages()
+            model.loadAllDictionaries()
+        }
 
         //when the button is clicked, launch the setting activity
         binding.settings.setOnClickListener {
@@ -66,8 +81,7 @@ class MainActivity : AppCompatActivity() {
             startActivity( intent )
         }
 
-        //load languages when creating the activity
-        model.loadAllLanguages()
+
         //observer to display the languages available
         model.langLoadInfo.observe(this) { it ->
             val langs : List<String> = it.map { it.lang }
@@ -80,15 +94,21 @@ class MainActivity : AppCompatActivity() {
         //observers to display the dictionaries available
         model.dicoLoadInfo.observe(this) {
 
+            var favorite : Int = 0
+
             dictionaries.clear()
-            it.forEach { it2 ->
-                dictionaries[it2.url.split('/')[2]] = it2
-            }
             dictionaries["Google"] = Dictionary("http://www.google.fr/search?q=traduction+", "*", "*")
+            it.forEachIndexed { index, element ->
+                dictionaries[element.url.split('/')[2]] = element
+                if(element.favoriteDictionary)
+                    favorite = index
+            }
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dictionaries.keys.toTypedArray())
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dico.adapter = adapter
+
+            binding.dico.setSelection(favorite)
         }
 
         //listeners to update the spinner with the right dictionary list when selecting languages in the spinners
@@ -105,6 +125,20 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {TODO("Not yet implemented")}
         }
+
+        binding.recycle?.layoutManager = LinearLayoutManager(this)
+
+        model.dicoAllLoadInfo.observe(this) {
+            binding.recycle?.adapter = MainRecyclerVIewAdapter(it, resources.getColor(R.color.even,null), resources.getColor(R.color.odd,null))
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outPersistentState.putInt("srcLangSelected",binding.lFrom.selectedItemPosition)
+        outPersistentState.putInt("dstLangSelected",binding.lTo.selectedItemPosition)
+        outPersistentState.putInt("selectedDico", binding.dico.selectedItemPosition)
     }
 
     //action to execute when the user comes back to the activity

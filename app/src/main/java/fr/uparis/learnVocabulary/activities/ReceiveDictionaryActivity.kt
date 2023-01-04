@@ -1,6 +1,7 @@
 package fr.uparis.learnVocabulary.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -40,9 +41,21 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
             binding.lTo.adapter = adapter
         }
 
+        model.loadDictionaries()
+        model.dictionaryLoadInfo.observe(this) {
+            it.forEach { element ->
+                element.favoriteDictionary = false
+            }
+        }
+
         //add the dictionary to the database when clicking the button
         binding.add.setOnClickListener {
-            model.insertDictionary(Dictionary(url.substring(0,url.lastIndexOf('/')), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
+            model.removeFavoriteDictionary()
+
+            val index = url.lastIndexOf("${binding.newWord}")
+            val rightBound = if(index == -1)  (url.lastIndexOf('/') - binding.newWord.text.length) else index
+
+            model.insertDictionary(Dictionary(url.substring(0, rightBound), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString(), true))
             model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
             finish()
         }
