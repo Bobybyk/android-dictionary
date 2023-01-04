@@ -3,6 +3,7 @@ package fr.uparis.learnVocabulary.activities
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,10 @@ import fr.uparis.learnVocabulary.viewModels.ManageLanguagesViewModel
 class ManageLanguagesActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityManageLanguagesBinding
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
+
     private lateinit var adapter : LanguagesListRecyclerViewAdapter
     private val model by lazy {
         ViewModelProvider(this)[ManageLanguagesViewModel::class.java]

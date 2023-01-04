@@ -3,6 +3,7 @@ package fr.uparis.learnVocabulary.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -38,8 +39,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //launch the learning service when the activity is created
-        launchService()
+        if(savedInstanceState != null) {
+            binding.lFrom.setSelection(savedInstanceState.getInt("srcLangSelected"))
+            binding.lTo.setSelection(savedInstanceState.getInt("srcLangSelected"))
+            binding.dico.setSelection(savedInstanceState.getInt("selectedDico"))
+        } else {
+            //launch the learning service when the activity is created
+            launchService()
+            //load languages when creating the activity
+            model.loadAllLanguages()
+            model.loadAllDictionaries()
+        }
 
         //when the button is clicked, launch the setting activity
         binding.settings.setOnClickListener {
@@ -71,8 +81,7 @@ class MainActivity : AppCompatActivity() {
             startActivity( intent )
         }
 
-        //load languages when creating the activity
-        model.loadAllLanguages()
+
         //observer to display the languages available
         model.langLoadInfo.observe(this) { it ->
             val langs : List<String> = it.map { it.lang }
@@ -84,8 +93,6 @@ class MainActivity : AppCompatActivity() {
 
         //observers to display the dictionaries available
         model.dicoLoadInfo.observe(this) {
-
-            Log.d(null, "$it")
 
             var favorite : Int = 0
 
@@ -101,7 +108,6 @@ class MainActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dico.adapter = adapter
 
-            Log.d(null, "$favorite")
             binding.dico.setSelection(favorite)
         }
 
@@ -121,12 +127,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.recycle?.layoutManager = LinearLayoutManager(this)
-        model.loadAllDictionaries()
+
         model.dicoAllLoadInfo.observe(this) {
-            Log.d(null, "$it")
             binding.recycle?.adapter = MainRecyclerVIewAdapter(it, resources.getColor(R.color.even,null), resources.getColor(R.color.odd,null))
         }
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outPersistentState.putInt("srcLangSelected",binding.lFrom.selectedItemPosition)
+        outPersistentState.putInt("dstLangSelected",binding.lTo.selectedItemPosition)
+        outPersistentState.putInt("selectedDico", binding.dico.selectedItemPosition)
     }
 
     //action to execute when the user comes back to the activity
