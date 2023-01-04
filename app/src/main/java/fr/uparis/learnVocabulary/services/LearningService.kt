@@ -16,6 +16,9 @@ import fr.uparis.learnVocabulary.R
 import fr.uparis.learnVocabulary.activities.MainActivity
 import fr.uparis.learnVocabulary.database.entities.Word
 import fr.uparis.learnVocabulary.viewModels.MainViewModel
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
@@ -28,11 +31,26 @@ class LearningService : Service() {
     private val dao by lazy { (application as LearnVocabularyApplication).database.getDAO() }
 
     private var currentWord : Word? = null
+    private var sessionsPerDay : Int = 0
+    private var wordsPerSession : Int = 0
+    private var trainingStartHour : Int = 0
+    private var trainingStartMinutes : Int = 0
+    private var trainingStopHour : Int = 0
+    private var trainingStopMinutes : Int = 0
+
+    private var currentSessionRemainingWords : Int = 0
+    private var sessionsRemainingToday : Int = 0
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sharedPref = getSharedPreferences(getString(R.string.shared_preferences_name),Context.MODE_PRIVATE)
-        var sessionsPerDay = sharedPref.getInt(getString(R.string.number_of_sessions_per_day), 1).toString()
-        var wordsPerSession = sharedPref.getInt(getString(R.string.number_of_words_per_session), 10).toString()
+        sessionsPerDay = sharedPref.getInt(getString(R.string.number_of_sessions_per_day), 1)
+        wordsPerSession = sharedPref.getInt(getString(R.string.number_of_words_per_session), 10)
+
+        trainingStartHour = sharedPref.getInt(getString(R.string.training_start_hour), 8)
+        trainingStartMinutes = sharedPref.getInt(getString(R.string.training_start_minutes), 0)
+        trainingStopHour = sharedPref.getInt(getString(R.string.training_stop_hour), 8)
+        trainingStopMinutes = sharedPref.getInt(getString(R.string.training_stop_minutes), 0)
+
 
         createNotificationChannel()
 
@@ -40,6 +58,8 @@ class LearningService : Service() {
             "start" -> {
                 Log.d(null, "action test")
                 sendNotification()
+                currentSessionRemainingWords = wordsPerSession
+                sessionsRemainingToday = sessionsPerDay
             }
             "wakeup" -> {
                 Log.d(null, "wakeup")
@@ -88,10 +108,74 @@ class LearningService : Service() {
         }
         val pendingIntent = PendingIntent.getService(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
 
+        var nextWordTime = 5
+
+        if(currentSessionRemainingWords > 0 && sessionsRemainingToday > 0) {
+            currentSessionRemainingWords--
+
+            Log.d(null, "cas 1 - $currentSessionRemainingWords words remaining")
+        } else if(currentSessionRemainingWords > 0 && sessionsRemainingToday == 0) {
+
+            currentSessionRemainingWords--
+
+            Log.d(null, "cas 2 - ${nextWordTime}sec before next word")
+
+        } else if(currentSessionRemainingWords == 0 && sessionsRemainingToday > 0){
+            currentSessionRemainingWords = wordsPerSession
+
+            //calculer temps pour plus tard
+            val sdf = SimpleDateFormat("HH", Locale.FRANCE)
+            val hoursNow = sdf.format(Date()).toInt()
+
+            val sdf2 = SimpleDateFormat("mm", Locale.FRANCE)
+            val minutesNow = sdf2.format(Date()).toInt()
+
+            var minutesDiff = 0
+            if(minutesNow > trainingStopMinutes) {
+                trainingStopHour--
+                trainingStopMinutes += 60
+            }
+
+            minutesDiff = trainingStopMinutes - minutesNow
+            val hoursDiff = trainingStopHour - hoursNow
+
+            minutesDiff += hoursDiff * 60
+
+            nextWordTime = ( minutesDiff / sessionsRemainingToday ) * 60
+
+            sessionsRemainingToday--
+
+            Log.d(null, "cas 3 - next word in ${nextWordTime / 60 }")
+
+        } else {
+
+            //calculer temps le lendemain
+            val sdf = SimpleDateFormat("HH", Locale.FRANCE)
+            val hoursNow = sdf.format(Date()).toInt()
+
+            val sdf2 = SimpleDateFormat("mm", Locale.FRANCE)
+            val minutesNow = sdf2.format(Date()).toInt()
+
+            var minutesDiff = 0
+            if(trainingStartMinutes > minutesNow) {
+                trainingStartHour--
+                trainingStartMinutes += 60
+            }
+
+            minutesDiff = minutesNow - trainingStartMinutes
+            val hoursDiff = hoursNow - trainingStartHour
+
+            minutesDiff += hoursDiff * 60
+
+            nextWordTime = (24 * 60) - minutesDiff
+
+            Log.d(null, "cas 4 see you tomorrow")
+        }
+
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 5 * 1000,
+            SystemClock.elapsedRealtime() + nextWordTime  * 1000,
             pendingIntent
         )
     }

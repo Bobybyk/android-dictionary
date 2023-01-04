@@ -53,9 +53,7 @@ class ReceiveDictionaryActivity : AppCompatActivity() {
             model.removeFavoriteDictionary()
 
             val index = url.lastIndexOf("${binding.newWord}")
-            val rightBound = if(index == -1)  (url.lastIndexOf('/') - binding.newWord.text.length)else index
-
-            Log.d(null, "${url.substring(0, rightBound)}")
+            val rightBound = if(index == -1)  (url.lastIndexOf('/') - binding.newWord.text.length) else index
 
             model.insertDictionary(Dictionary(url.substring(0, rightBound), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString(), true))
             model.insertWord(Word(binding.newWord.text.toString(), binding.lFrom.selectedItem.toString(), binding.lTo.selectedItem.toString()))
